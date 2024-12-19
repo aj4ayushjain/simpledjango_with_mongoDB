@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+    environment:
+      - DEBUG=1
+      - DJANGO_ALLOWED_HOST=localhost 127.0.0.1
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+      - MONGO_URI=mongodb://mongo:27017/mydatabase
+
+  celery:
+    build: .
+    command: celery -A myproject worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/mydatabase
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo_backup:/data
+    entrypoint: ["/bin/bash", "/data/restore.sh"]  # Using the custom restore script
+
+
+
+
+

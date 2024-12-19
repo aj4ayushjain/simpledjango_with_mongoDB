@@ -19,7 +19,7 @@ services:
 
   celery:
     build: .
-    command: celery -A myproject worker --loglevel=info
+    command: celery -A simpledjango_with_mongoDB worker --loglevel=info
     volumes:
       - .:/app
     depends_on:
@@ -30,6 +30,7 @@ services:
 
   mongo:
     image: mongo:latest
+    container_name: mongo
     ports:
       - "27017:27017"
     volumes:

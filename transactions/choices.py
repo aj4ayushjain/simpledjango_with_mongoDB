@@ -9,9 +9,9 @@ class TypeChoices(models.TextChoices):
 
 class TimePeriodsModeChoices(models.TextChoices):
     """ choices related to request summary 'mode' field """
-    daily = "daily", "daily"
-    weekly = "weekly", "weekly"
-    monthly = "monthly", "monthly"
+    DAILY = "daily", "daily"
+    WEEKLY = "weekly", "weekly"
+    MONTHLY = "monthly", "monthly"
 
 
 

@@ -78,7 +78,7 @@ DATABASES = {
 
 MONGODB_DATABASES = {
     "default": {
-        "name": "project",
+        "name": "zibal_db",
         "host": "mongo",
         "port": 27017,
         "tz_aware": True,
@@ -92,14 +92,9 @@ mongoengine.connect(
 )
 
 
-CELERY_BROKER_URL = 'mongodb://mongo:27017/'  # MongoDB URL for task queue
-CELERY_RESULT_BACKEND = 'mongodb://mongo:27017/'  # MongoDB URL for results
-mongodb_backend_settings = {
-    "host": "mongo",
-    "port": 27017,
-    'database': 'mydb',
-    'taskmeta_collection': 'my_taskmeta_collection',
-}
+CELERY_BROKER_URL = 'mongodb://mongo:27017/celery_task_queue'  # MongoDB URL for task queue
+CELERY_RESULT_BACKEND = 'mongodb://mongo:27017/celery_task_result'  # MongoDB URL for results
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

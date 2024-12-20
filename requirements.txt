@@ -25,3 +25,5 @@ sqlparse==0.5.3
 tzdata==2024.2
 vine==5.1.0
 wcwidth==0.2.13
+
+persiantools==5.1.0

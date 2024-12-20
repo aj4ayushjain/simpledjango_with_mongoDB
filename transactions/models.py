@@ -1,8 +1,9 @@
 import mongoengine
+from bson import ObjectId
 
 from transactions.choices import TypeChoices, TimePeriodsModeChoices
-from transactions.utils import fill_mossing_dates_with_zero, convert_date_key_to_jalali
-
+from transactions.utils import (fill_missing_dates_with_zero, convert_jalali_date_to_jajli_numberic_day,
+                                aggregate_date_key_to_jalali_week, aggregate_date_key_to_jalali_monthly)
 class Transaction(mongoengine.Document):
     """ containing information about a single transaction related to a user """
     merchantId = mongoengine.ObjectIdField(required=True)
@@ -49,8 +50,7 @@ class Transaction(mongoengine.Document):
         if user_id is not None:
             pipelines.insert(0, cls.user_id_filter_pipeline(user_id))
 
-
-        return cls.objects.aggregate(*pipelines)
+        return list(cls.objects.aggregate(*pipelines))
 
     @classmethod
     def aggregate_daily_count_sum(cls, user_id: str|None =None) -> list[dict[str, int]]:
@@ -92,12 +92,12 @@ class Transaction(mongoengine.Document):
         if user_id is not None:
             pipelines.insert(0, cls.user_id_filter_pipeline(user_id))
 
-        return cls.objects.aggregate(*pipelines)
+        return list(cls.objects.aggregate(*pipelines))
 
     @staticmethod
     def user_id_filter_pipeline(user_id: str):
         """ will return match pipeline for a given id """
-        return {'$match': {'user_id': user_id}}
+        return {'$match': {'merchantId': ObjectId(user_id)}}
 
     @classmethod
     def get_persian_aggregated(cls, sum_type: str, mode: str, merchant_id: str|None = None):
@@ -107,20 +107,20 @@ class Transaction(mongoengine.Document):
         :param mode in ["daily", "weekly", "monthly"]
         :param merchant_id: type: str
         """
-        if sum_type not in TypeChoices.choices or mode not in TimePeriodsModeChoices.choices:
+        if sum_type not in TypeChoices or mode not in TimePeriodsModeChoices:
             raise ValueError(f"param sum_type:{sum_type}, or param mode:{mode} is not an acceptable choice.")
 
         if sum_type == TypeChoices.AMOUNT:
-            aggregated = fill_mossing_dates_with_zero(cls.aggregate_daily_amount_sum(user_id=merchant_id))
+            aggregated = fill_missing_dates_with_zero(cls.aggregate_daily_amount_sum(user_id=merchant_id))
         elif sum_type == TypeChoices.COUNT:
-            aggregated = fill_mossing_dates_with_zero(cls.aggregate_daily_count_sum(user_id=merchant_id))
+            aggregated = fill_missing_dates_with_zero(cls.aggregate_daily_count_sum(user_id=merchant_id))
 
         if mode == TimePeriodsModeChoices.DAILY:
-            return convert_date_key_to_jalali(aggregated=aggregated)
+            return convert_jalali_date_to_jajli_numberic_day(aggregated=aggregated)
         elif mode == TimePeriodsModeChoices.WEEKLY:
-            ...
+            return aggregate_date_key_to_jalali_week(aggregated=aggregated)
         elif mode == TimePeriodsModeChoices.MONTHLY:
-            ...
+            return aggregate_date_key_to_jalali_monthly(aggregated=aggregated)
 
 
 

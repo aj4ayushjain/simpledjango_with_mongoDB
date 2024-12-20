@@ -43,7 +43,7 @@ def convert_date_key_to_jalali(aggregated: dict[datetime.datetime, int]) -> dict
     return result
 
 
-def convert_jalali_date_to_jajli_numberic_day(aggregated: dict[datetime.datetime, int]) -> dict[str, int]:
+def convert_date_to_jajli_numberic_day(aggregated: dict[datetime.datetime, int]) -> dict[str, int]:
     """ will dict with keys of jalali type to string type, like 1402/04/02 """
     result = {}
     for key, val in aggregated.items():

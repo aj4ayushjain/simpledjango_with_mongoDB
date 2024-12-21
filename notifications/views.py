@@ -16,10 +16,10 @@ class SendNotificationView(APIView):
         """
         Return satus 200 if no exception arise
         """
-        serializer = self.serializer(data=request.date)
+        serializer = self.serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        send_notification.apply_async(medium=serializer.validated_data.get("medium"),
+        send_notification.delay(medium=serializer.validated_data.get("medium"),
                                       merchant_id=serializer.validated_data.get("merchantId"),
                                       message=serializer.validated_data.get("message"))
-        return Response(status=status.HTTP_200_OK)
+        return Response(data={"status": "ok"}, status=status.HTTP_200_OK)
 

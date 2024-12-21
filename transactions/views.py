@@ -17,7 +17,7 @@ class TransactionNonCachedAggregationView(APIView):
         """
         Return a list containing aggregated values of transactions with given params(filter)
         """
-        serializer = self.serializer(data=request.date)
+        serializer = self.serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         agg_data = Transaction.get_persian_aggregated(sum_type=serializer.validated_data.get('type'),
                                                       mode=serializer.validated_data.get('mode'),
@@ -37,7 +37,7 @@ class TransactionCachedAggregationView(APIView):
         """
         Return a list containing aggregated values of transactions with given params(filter)
         """
-        serializer = self.serializer(data=request.date)
+        serializer = self.serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         agg_data = TransactionSummary.get_persian_aggregated(sum_type=serializer.validated_data.get('type'),
                                                              mode=serializer.validated_data.get('mode'))

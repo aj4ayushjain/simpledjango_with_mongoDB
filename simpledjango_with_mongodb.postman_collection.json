@@ -1,0 +1,176 @@
+{
+	"info": {
+		"_postman_id": "a90ebba3-acf2-42d4-a628-aeaf40a1715d",
+		"name": "simpledjango_with_mongodb",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40579029"
+	},
+	"item": [
+		{
+			"name": "notification",
+			"item": [
+				{
+					"name": "send_notification",
+					"item": [
+						{
+							"name": "{{baseUrl}}/notification/send_notification/",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "medium",
+											"value": "1",
+											"description": "medium type int",
+											"type": "text"
+										},
+										{
+											"key": "message",
+											"value": "new update arrived",
+											"description": "message type str",
+											"type": "text"
+										},
+										{
+											"key": "merchantId",
+											"value": "63a69a2d18f93478889d5f11",
+											"description": "merchantId type str",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/notification/send_notification/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"notification",
+										"send_notification",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "trx",
+			"item": [
+				{
+					"name": "cached_transaction_aggregation",
+					"item": [
+						{
+							"name": "{{baseUrl}}/trx/cached_transaction_aggregation/",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "type",
+											"value": "amount",
+											"description": "choices: amount, count",
+											"type": "text"
+										},
+										{
+											"key": "mode",
+											"value": "daily",
+											"description": "choices: daily, weekly, monthly",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/trx/cached_transaction_aggregation/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"trx",
+										"cached_transaction_aggregation",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "non_cached_transaction_aggregation",
+					"item": [
+						{
+							"name": "{{baseUrl}}/trx/non_cached_transaction_aggregation/",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "type",
+											"value": "count",
+											"description": "choices: amount, count",
+											"type": "text"
+										},
+										{
+											"key": "mode",
+											"value": "daily",
+											"description": "choices: daily, weekly, monthly",
+											"type": "text"
+										},
+										{
+											"key": "merchantId",
+											"value": "63a69a2d18f93478889d5f11",
+											"description": "optional: user's marchantId",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/trx/non_cached_transaction_aggregation/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"trx",
+										"non_cached_transaction_aggregation",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "/"
+		}
+	]
+}

@@ -1,3 +1,4 @@
+import datetime
 import mongoengine
 from pymongo import UpdateOne
 from bson import ObjectId
@@ -12,6 +13,19 @@ class Transaction(mongoengine.Document):
     merchantId = mongoengine.ObjectIdField(required=True)
     amount = mongoengine.IntField(min_value=1)
     createdAt = mongoengine.DateTimeField(required=True)
+
+    @classmethod
+    def get_last_day_transaction_summary_by_merchant(cls, merchant_id) -> dict:
+        """ will return summary of all transaction made by given merchantId in last_day """
+        time_difference = datetime.timedelta(hours=3, minutes=30)  # iran local time from UTC
+        end_time = datetime.datetime.today() + time_difference
+        start_time = end_time - datetime.timedelta(days=1)
+        last_day_transactions = cls.objects(merchantId=ObjectId(merchant_id),
+                                            createdAt__gte=start_time,
+                                            createdAt__lt=end_time)
+        total_sum = last_day_transactions.sum('amount')
+        total_count = last_day_transactions.count()
+        return {"total_amount": total_sum, "count": total_count}
 
     @classmethod
     def aggregate_daily_amount_sum(cls, user_id: str | None = None) -> list[dict[str, int]]:
@@ -168,4 +182,3 @@ class TransactionSummary(mongoengine.Document):
             return aggregate_date_key_to_jalali_week(aggregated=aggregated)
         elif mode == TimePeriodsModeChoices.MONTHLY:
             return aggregate_date_key_to_jalali_monthly(aggregated=aggregated)
-

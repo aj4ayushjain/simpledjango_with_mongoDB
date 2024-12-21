@@ -1,9 +1,9 @@
-# from django.contrib import admin
 from django.urls import path, include
 
 import transactions.urls
+import notifications.urls
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
-    path("trx/", include(transactions.urls))
+    path("trx/", include(transactions.urls)),
+    path("notification/", include(notifications.urls))
 ]

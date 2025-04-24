@@ -1,22 +1,65 @@
 ## Installation
 
-Follow these steps to set up the project locally using Docker:
+Follow these steps to set up the project locally:
 
-1. **Clone the Repository**
+1. **Make Sure you have python3 & virtual env installed**
+
+2. **Setup the Virtual Env**
 
    ```bash
-   git clone https://github.com/badmoham/simpledjango_with_mongoDB.git
-2. **make sure you have docker and docker-compose installed on you machine**
+   python3 -m venv virtual_env
 
-3. **build docker image**
+3. **Activate the Virtual Env**
+
    ```bash
-   docker compose up --build
+   source virtual_env/bin/activate
 
-now everythign shoudl be prepared!
+3. **Install the dependencies**
+   ```bash
+   pip install -r requirements.txt
 
-postman collection: ```simpledjango_with_mongodb.postman_collection.json```
+4. **Setup the docker and then mongodb locally** 
+   ```
+   docker pull mongo:latest  
+   docker run -d -p 27017:27017 --name=mongodb mongo:latest     
 
-django command to make tranaaction_summary: ```
-python manage.py aggregate_transactions ```
+5. **now everything should be prepared!**
 
-or if you want to run that command in docker: ```docker-compose exec web python manage.py aggregate_transactions ```
+   ```bash
+   python manage.py runserver
+
+
+
+CURL Requests:-
+
+**CREATE INGREDIENTS**
+   ```bash
+   curl -X POST http://127.0.0.1:8000/api/ingredient/ \
+   -H "Content-Type: application/json" \
+   -d '{"name": "Rice", "quantity": 200, "unit": "grams"}'
+
+**LIST INGREDIENTS**
+   ```bash
+   curl -X 'GET' \
+  'http://localhost:8000/api/ingredient/' \
+  -H 'accept: */*'
+
+** Update ingredients **
+   curl -X PATCH http://127.0.0.1:8000/api/ingredient/6809fc51c29d6c9790ddb4e4/ \
+   -H "Content-Type: application/json" \
+   -d '{
+      "quantity": 500 
+   }'
+
+**LIST ITEMS**
+curl -X GET http://127.0.0.1:8000/api/item/
+
+
+curl -X POST http://127.0.0.1:8000/api/item/ \
+-H "Content-Type: application/json" \
+-d '{
+    "name": "Sourdough Bread",
+    "price": 5.99,
+    "ingredients": [{ "name": "Rye Flour", "quantity": 400 , "unit": "gms"},{ "name": "Water", "quantity": 300 , "unit": "ml"}]
+}'
+

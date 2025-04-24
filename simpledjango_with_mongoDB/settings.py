@@ -1,6 +1,5 @@
 from pathlib import Path
 
-from celery.schedules import crontab
 import mongoengine
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -18,6 +17,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Enable token-based authentication in settings.py
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.JWTAuthentication',  # Use JWT authentication -> Obtain new JWT TOKEN  & Refresh Token
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Require authentication for all views by default
+    ],
+}
 
 # Application definition
 
@@ -31,9 +39,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'drf_spectacular',
-
-    "transactions.apps.TransactionsConfig",
-    "notifications.apps.NotificationsConfig"
+    'shop.apps.ShopConfig',
 ]
 
 MIDDLEWARE = [
@@ -81,7 +87,7 @@ DATABASES = {
 MONGODB_DATABASES = {
     "default": {
         "name": "zibal_db",
-        "host": "mongo",
+        "host": "localhost",
         "port": 27017,
         "tz_aware": True,
     }
@@ -93,16 +99,6 @@ mongoengine.connect(
     port=MONGODB_DATABASES["default"]['port']
 )
 
-
-CELERY_BROKER_URL = 'mongodb://mongo:27017/celery_task_queue'  # MongoDB URL for task queue
-CELERY_RESULT_BACKEND = 'mongodb://mongo:27017/celery_task_result'  # MongoDB URL for results
-
-CELERY_BEAT_SCHEDULE = {
-    'run-daily-task-at-midnight': {
-        'task': 'notification.tasks.notify_today_transaction_sum',
-        'schedule': crontab(minute=0, hour=0),  # At 00:00
-    },
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

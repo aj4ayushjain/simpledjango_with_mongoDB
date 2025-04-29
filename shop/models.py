@@ -14,7 +14,7 @@ class Ingredient(mongoengine.Document):
 class Item(mongoengine.Document):
     name = mongoengine.StringField(required=True)
     price = mongoengine.FloatField(required=True)
-    ingredients = mongoengine.ListField(mongoengine.ReferenceField(Ingredient))
+    ingredients = mongoengine.ListField(mongoengine.ReferenceField(Ingredient, reverse_delete_rule=mongoengine.DENY))
     def __str__(self):
         return self.name
     

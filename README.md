@@ -28,38 +28,70 @@ Follow these steps to set up the project locally:
    ```bash
    python manage.py runserver
 
+## CURL Requests
+
+### **CREATE INGREDIENTS**
+```bash
+curl -X POST http://127.0.0.1:8000/api/ingredient/ \
+-H "Content-Type: application/json" \
+-d '{"name": "Rice", "quantity": 200, "unit": "grams"}'
+```
+
+### **LIST INGREDIENTS**
+```bash
+curl -X GET \
+http://127.0.0.1:8000/api/ingredient/ \
+-H "accept: */*"
+```
+
+### **UPDATE INGREDIENTS**
+```bash
+curl -X PATCH http://127.0.0.1:8000/api/ingredient/<ingredient_id>/ \
+-H "Content-Type: application/json" \
+-d '{
+    "quantity": 500
+}'
+```
+
+### **DELETE INGREDIENT**
+```bash
+curl -X DELETE http://127.0.0.1:8000/api/ingredient/<ingredient_id>/ \
+-H "accept: */*"
+```
 
 
-CURL Requests:-
-
-**CREATE INGREDIENTS**
-   ```bash
-   curl -X POST http://127.0.0.1:8000/api/ingredient/ \
-   -H "Content-Type: application/json" \
-   -d '{"name": "Rice", "quantity": 200, "unit": "grams"}'
-
-**LIST INGREDIENTS**
-   ```bash
-   curl -X 'GET' \
-  'http://localhost:8000/api/ingredient/' \
-  -H 'accept: */*'
-
-** Update ingredients **
-   curl -X PATCH http://127.0.0.1:8000/api/ingredient/6809fc51c29d6c9790ddb4e4/ \
-   -H "Content-Type: application/json" \
-   -d '{
-      "quantity": 500 
-   }'
-
-**LIST ITEMS**
+### **LIST ITEMS**
+```bash
 curl -X GET http://127.0.0.1:8000/api/item/
+```
 
-
+### **CREATE ITEMS**
+```bash
 curl -X POST http://127.0.0.1:8000/api/item/ \
 -H "Content-Type: application/json" \
 -d '{
     "name": "Sourdough Bread",
     "price": 5.99,
-    "ingredients": [{ "name": "Rye Flour", "quantity": 400 , "unit": "gms"},{ "name": "Water", "quantity": 300 , "unit": "ml"}]
+    "ingredients": [
+        { "name": "Rye Flour", "quantity": 400, "unit": "gms" },
+        { "name": "Water", "quantity": 300, "unit": "ml" }
+    ]
 }'
+```
+
+### **UPDATE ITEMS**
+```bash
+curl -X PATCH http://127.0.0.1:8000/api/item/<item_id>/ \
+-H "Content-Type: application/json" \
+-d '{
+    "price": 6.99
+}'
+```
+
+### **DELETE ITEM**
+```bash
+curl -X DELETE http://127.0.1:8000/api/item/<item_id>/ \
+-H "accept: */*"
+```
+
 
